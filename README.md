@@ -60,42 +60,22 @@ Next, let's design the order workflow and describe its functional components. Th
 Let's describe these steps in detail and refer to their source code:
 
 1) **Login:** A user enters the app using a username. For this demo, there is no authentication.
-Source code: login.js
 
 2) **Place order:** The user selects food items and places an order.
-Source code: placeOrder.js
 
 3) **Validate order:** As soon as an order is placed, it is validated in the backend.
-Source code: validateOrder.js
 
 4) **Payment:** After the order is validated, user is requested for payment.
-Source code: payment.js
 
 5) **Restaurant approval:** After successful payment for the order, restaurant should accept and approve the request.
-Source code: restaurantApproval.js
 
 6) **Agent assignment:** After restaurant approves, an agent is assigned for delivery of the order.
-Source code: agentAssignment.js
 
-#### Local development 
-
-We need to setup a local development environment for development and testing. For this purpose, we will run a node server with each of the functions exposed as HTTP APIs as defined in localServer.js. Run the server and try these functions out:
-
-```bash
-$ node localServer.js
-```
-
-In a different terminal: 
-
-```bash
-$ curl -d '{}' -H 'Content-Type: application/json' localhost:8080/login
-```
+Next, let's get into development.
 
 ### Step 2: Setup a realtime GraphQL interface
 
 3factor requires the frontend use GraphQL for querying and performing actions. The reason for this is two-fold: fast iteration and realtime feedback. 
-
-There are 3 frontend actions in the order workflow: login, place order and payment. The other actions are backend actions.
 
 We will use Hasura to get GraphQL APIs over our existing postgres database. We will use Docker to run Hasura. If you do not have Docker, you can install it from here.
 
@@ -124,13 +104,44 @@ Hasura will also detect relationships (via foreign-keys) automatically and you c
 
 ![track-all-relations](assets/track-all-relations.png)
 
-Now, we can write our frontend using these GraphQL APIs. Refer to `order-app/src` for the frontend source code. Run the frontend app as follows:
+### Step 3: Local development 
+
+Now, we can write our frontend using GraphQL APIs. We can perform the following actions directly via the frontend using authenticated GraphQL APIs:
+
+1) **Login**
+2) **Place order**
+
+Refer to `src/order-app-frontend` for the frontend source code. Run the frontend app as follows:
 
 ```bash
 $ npm run build
 ```
 
-### Step 3: Setup event system
+We need to setup a development environment for our backend. We need to write backend logic for the following steps:
+
+1) **Validate order:** Source code: [validate-order](src/backend/validate-order)
+
+2) **Payment:**  Source code: [payment](src/backend/payment)
+
+3) **Restaurant approval:**  Source code: [restaurant-approval](src/backend/restaurant-approval)
+
+4) **Agent assignment:** Source code: [agent-assignment](src/backend/agent-assignment)
+
+For this purpose, we will run a node server with each of the above functions exposed as HTTP APIs as defined in `localDevelopment.js`. Run the server and try these functions out:
+
+```bash
+$ node localDevelopment.js
+
+Output: server running on port 9000
+```
+
+In a different terminal: 
+
+```bash
+$ curl -d '{"order_id": "abc-ad21-adf"}' -H 'Content-Type: application/json' localhost:9000/validate-order
+```
+
+### Step 4: Setup event system
 
 Now that we have our frontend components and backend components ready, it is time to glue everything together via events. The event system is at the center of 3factor architecture. The event system is what drives the entire workflow: from the frontend initiating the events to the backend triggering functions on emitted events.
 
@@ -152,7 +163,7 @@ $ curl -d @event-triggers.json -H 'Content-Type: application/json' localhost:808
 
 This finishes the entire development cycle on our local machine. You can start testing the app now.
 
-### Step 4: Use serverless functions
+### Step 5: Use serverless functions
 
 Now, that you have locally developed and tested your app. Let's deploy all our functions to AWS Lambda and update the Event Triggers from localhost HTTP APIs to Lambda APIs.
 
