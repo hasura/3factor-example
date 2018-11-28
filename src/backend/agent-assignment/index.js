@@ -13,18 +13,21 @@ function getRandomDriver() {
 }
 
 async function assignAgent(order){
-    var driverId = getRandomDriver();
-    var res = await sequelize.query('BEGIN;' +
+    try {
+
+        var driverId = getRandomDriver();
+        var res = await sequelize.query('BEGIN;' +
                                     'INSERT INTO assignment (order_id, driver_id) values (:orderId, :driverId); ' +
                                     'UPDATE orders SET driver_assigned=true WHERE order_id = :orderId ;' +
                                     'COMMIT;',
                                     { replacements: { orderId: order.order_id, driverId: driverId } }
                                    );
+        return res;
+    } catch(e) {
+        console.log(e);
+        throw new Error(e);
+    }
 }
 
-const testOrder = {
-    "order_id": "adsfadfa1231231"
-};
-
-assignAgent(testOrder);
+exports.assignAgent = assignAgent;
 

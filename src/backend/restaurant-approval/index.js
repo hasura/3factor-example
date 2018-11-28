@@ -10,15 +10,12 @@ async function restaurantApproval(order) {
     try {
         var res = await sequelize.query('UPDATE orders SET approved = true WHERE order_id = :orderId',
                                     { replacements: { orderId: order.order_id } }
-                                   );
+                                       );
+        return res;
     } catch(e) {
         console.log(e);
         throw new Error(e);
     }
 }
 
-const testOrder = {
-    "order_id": "adsfadfa1231231"
-};
-
-restaurantApproval(testOrder);
+exports.restaurantApproval = restaurantApproval;

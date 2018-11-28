@@ -13,20 +13,12 @@ async function makePayment(paymentReq) {
                                     'UPDATE orders SET payment_valid=true WHERE order_id = :orderId; ' +
                                     'COMMIT;',
                                         { replacements: { orderId: paymentReq.order_id, amount: paymentReq.amount, type: paymentReq.type } }
-                                   );
+                                       );
+        return res;
     } catch(e) {
         console.log(e);
         throw new Error(e);
     }
 }
 
-const testPayment = {
-    "order_id": "adsfadfa1231231",
-    "amount": 100,
-    "type": "credit_card"
-};
-
-makePayment(testPayment);
-
-
-
+exports.makePayment = makePayment;

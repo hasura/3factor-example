@@ -23,8 +23,4 @@ async function validateOrder(order) {
     }
 }
 
-const testOrder = {
-    "order_id": "adsfadfa1231231"
-};
-
-validateOrder(testOrder);
+exports.validateOrder = validateOrder;
