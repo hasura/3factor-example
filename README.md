@@ -114,7 +114,9 @@ Now, we can write our frontend using GraphQL APIs. We can perform the following 
 Refer to `src/order-app-frontend` for the frontend source code. Run the frontend app as follows:
 
 ```bash
-$ npm run build
+$ cd src/order-app-frontend
+$ npm install
+$ npm start
 ```
 
 We need to setup a development environment for our backend. We need to write backend logic for the following steps:
@@ -130,15 +132,17 @@ We need to setup a development environment for our backend. We need to write bac
 For this purpose, we will run a node server with each of the above functions exposed as HTTP APIs as defined in `localDevelopment.js`. Run the server and try these functions out:
 
 ```bash
+$ cd src/backend
+$ npm install
 $ node localDevelopment.js
 
-Output: server running on port 9000
+Output: server running on port 8081
 ```
 
 In a different terminal: 
 
 ```bash
-$ curl -d '{"order_id": "abc-ad21-adf"}' -H 'Content-Type: application/json' localhost:9000/validate-order
+$ curl -d '{"order_id": "abc-ad21-adf"}' -H 'Content-Type: application/json' localhost:8081/validate-order
 ```
 
 ### Step 4: Setup event system
