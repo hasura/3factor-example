@@ -67,7 +67,7 @@ Let's describe these steps in detail and refer to their source code:
 
 4) **Payment:** After the order is validated, user is requested for payment.
 
-5) **Restaurant approval:** After successful payment for the order, restaurant should accept and approve the request.
+5) **Restaurant approval:** After successful payment for the order, restaurant receives and approves the order.
 
 6) **Agent assignment:** After restaurant approves, an agent is assigned for delivery of the order.
 
@@ -111,7 +111,7 @@ Now, we can write our frontend using GraphQL APIs. We can perform the following 
 1) **Login**
 2) **Place order**
 
-Refer to `src/order-app-frontend` for the frontend source code. Run the frontend app as follows:
+Refer to [src/order-app-frontend](src/order-app-frontend) for the frontend source code. Run the frontend app as follows:
 
 ```bash
 $ cd src/order-app-frontend
@@ -129,7 +129,7 @@ We need to setup a development environment for our backend. We need to write bac
 
 4) **Agent assignment:** Source code: [agent-assignment](src/backend/agent-assignment)
 
-For this purpose, we will run a node server with each of the above functions exposed as HTTP APIs as defined in `localDevelopment.js`. Run the server and try these functions out:
+For this purpose, we will run a node server with each of the above functions exposed as HTTP APIs as defined in [src/backend/localDevelopment.js](src/backend/localDevelopment.js). Run the server and try these functions out:
 
 ```bash
 $ cd src/backend
