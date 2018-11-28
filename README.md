@@ -40,13 +40,13 @@ The core modeling of a 3factor app is very similar to traditional application mo
 
 #### Schema
 
-The schema of our application is defined in `migrations.sql` which you can apply on your postgres database.
+The schema of our application is defined in [schema.sql](schema.sql) which you can apply on your postgres database.
 
 ```bash
 
 $ export POSTGRES_CONNECTION_STRING='postgres://postgres:password@localhost:5432/postgres'
 
-$ psql $POSTGRES_CONNECTION_STRING < migrations.sql
+$ psql $POSTGRES_CONNECTION_STRING < schema.sql
 
 ```
 In the above snippet, we are running a postgres database on localhost.
