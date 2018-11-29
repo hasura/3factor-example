@@ -77,7 +77,7 @@ Next, let's get into development.
 
 3factor requires the frontend use GraphQL for querying and performing actions. The reason for this is two-fold: fast iteration and realtime feedback. 
 
-We will use Hasura to get GraphQL APIs over our existing postgres database. We will use Docker to run Hasura. If you do not have Docker, you can install it from here.
+We will use Hasura to get GraphQL APIs over our existing postgres database. We will use Docker to run Hasura. If you do not have Docker, you can install it from [here](https://store.docker.com/search?type=edition&offering=community).
 
 If you have a remote postgres database, run the following command:
 ```bash
