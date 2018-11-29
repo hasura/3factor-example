@@ -11,7 +11,13 @@ app.use(bodyParser.json());
 
 app.post('/validate-order', async function (req, res) {
     try{
-        var result = await validateOrder(req.body);
+        var order;
+        if(req.body.event) {
+            order = req.body.event.data.new;
+        } else {
+            order = req.body;
+        }
+        var result = await validateOrder(order);
         res.json(result);
     } catch(e) {
         console.log(e);
@@ -21,7 +27,8 @@ app.post('/validate-order', async function (req, res) {
 
 app.post('/payment', async function (req, res) {
     try {
-        var result = await makePayment(req.body);
+        var paymentReq = req.body;
+        var result = await makePayment(paymentReq);
         res.json(result);
     } catch(e) {
         console.log(e);
@@ -31,7 +38,13 @@ app.post('/payment', async function (req, res) {
 
 app.post('/restaurant-approval', async function (req, res) {
     try {
-        var result = await restaurantApproval(req.body);
+        var order;
+        if(req.body.event) {
+            order = req.body.event.data.new;
+        } else {
+            order = req.body;
+        }
+        var result = await restaurantApproval(order);
         res.json(result);
     } catch(e) {
         console.log(e);
@@ -41,7 +54,13 @@ app.post('/restaurant-approval', async function (req, res) {
 
 app.post('/agent-assignment', async function (req, res) {
     try {
-        var result = await assignAgent(req.body);
+        var order;
+        if(req.body.event) {
+            order = req.body.event.data.new;
+        } else {
+            order = req.body;
+        }
+        var result = await assignAgent(order);
         res.json(result);
     } catch(e) {
         console.log(e);

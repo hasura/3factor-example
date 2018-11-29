@@ -8,7 +8,7 @@ const uuidv1 = require('uuid/v1');
 
 const GET_ITEMS= gql`
   query fetch_items {
-    menu_items (order_by: name_asc) {
+    menu_items (order_by: {name: asc}) {
       name
     }
   }

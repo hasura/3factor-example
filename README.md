@@ -129,7 +129,7 @@ We need to setup a development environment for our backend. We need to write bac
 
 4) **Agent assignment:** Source code: [agent-assignment](src/backend/agent-assignment)
 
-For this purpose, we will run a node server with each of the above functions exposed as HTTP APIs as defined in [src/backend/localDevelopment.js](src/backend/localDevelopment.js). Run the server and try these functions out:
+For this purpose, we will run a node server with each of the above functions exposed as HTTP APIs (webhooks) as defined in [src/backend/localDevelopment.js](src/backend/localDevelopment.js). Run the server and try these functions out:
 
 ```bash
 $ cd src/backend
@@ -155,14 +155,14 @@ In the frontend, we will subscribe to the events on `order` table via realtime G
 
 In the backend, we will use Hasura Event Triggers to invoke HTTP APIs when events are emitted. The backend requires the following Event Triggers:
 
-1) validate_order: On `insert` of an order (via placeOrder.js).
-2) restaurant_approval: On `update` of an order after successful payment (via payment.js).
-3) agent_assignment: On `update` of an order after restaurant approval (via restaurantApproval.js).
+1) validate-order: On `insert` of an order.
+2) restaurant-approval: On `update` of an order after successful payment.
+3) agent-assignment: On `update` of an order after restaurant approval.
 
-Let's setup these triggers with our locally deployed functions (localServer.js). We can do this either interactively via the Hasura console or through Hasura API. Run the following command to setup these event triggers via Hasura API:
+Let's setup these triggers with our locally deployed functions: [localDevelopment.js](src/backend/localDevelopment.js). We can do this either interactively via the Hasura console or through Hasura API. Run the following command to setup these event triggers via Hasura API:
 
 ```bash
-$ curl -d @event-triggers.json -H 'Content-Type: application/json' localhost:8080
+$ curl -d @event-triggers.json -H 'Content-Type: application/json' localhost:8080/v1/query
 ```
 
 This finishes the entire development cycle on our local machine. You can start testing the app now.
@@ -171,12 +171,12 @@ This finishes the entire development cycle on our local machine. You can start t
 
 Now, that you have locally developed and tested your app. Let's deploy all our functions to AWS Lambda and update the Event Triggers from localhost HTTP APIs to Lambda APIs.
 
-Serverless functions are a crucial component of 3factor as it ensures many requirements like infinite scale, no-ops and cost.
+Serverless functions are a crucial component of 3factor as it ensures many capabilities like infinite scale, no-ops and cost.
 
-To prepare our HTTP APIs for Lambda, we need to wrap the business logic in a Lambda "context". The Lambda context for `validateOrder` is given in `validateOrderCtx.js`. Let's package this as a zip file and deploy to Lambda:
+To prepare our HTTP APIs for Lambda, we need to wrap the business logic in a Lambda "context". The Lambda context for `validate-order` is given in [validate-order/lambdaCtx.js](src/backend/validate-order/lambdaCtx.js). Let's package this as a zip file and deploy to Lambda:
 
 ```bash
-$ zip -r validateOrder.zip validateOrder/*
+$ zip -r validate-order.zip validate-order/*
 ```
 
 There are many tutorials to deploy a NodeJS package on AWS Lambda with API Gateway for e.g. [this](https://github.com/hasura/graphql-serverless/tree/master/aws-nodejs/apollo-sequelize#deployment). We will keep Lambda deployment out of the scope of this tutorial.
