@@ -165,6 +165,10 @@ Let's setup these triggers with our locally deployed functions: [localDevelopmen
 $ curl -d @event-triggers.json -H 'Content-Type: application/json' localhost:8080/v1/query
 ```
 
+Go back to the Hasura console at http://localhost:8080/console and in the `Events` tab you will see the newly created Event Triggers:
+
+![event-triggers](assets/event-triggers.png)
+
 This finishes the entire development cycle on our local machine. You can start testing the app now.
 
 ### Step 5: Use serverless functions
@@ -181,7 +185,7 @@ $ zip -r validate-order.zip validate-order/*
 
 There are many tutorials to deploy a NodeJS package on AWS Lambda with API Gateway for e.g. [this](https://github.com/hasura/graphql-serverless/tree/master/aws-nodejs/apollo-sequelize#deployment). We will keep Lambda deployment out of the scope of this tutorial.
 
-Assuming you have deployed your Lambda succesfully, you would have received an HTTP endpoint for it. Update your Event Triggers with the new endpoints and that's it.
+Assuming you have deployed your Lambda succesfully, you would have received an HTTP endpoint for it. Update your Event Triggers with the new endpoints through the Hasura console or Hasura API and that's it.
 
 #### Connection Pooling
 
