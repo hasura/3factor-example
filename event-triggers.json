@@ -1,0 +1,67 @@
+{
+	"type": "bulk",
+	"args": [
+		{
+			"args": {
+				"headers": [],
+				"insert": {
+					"columns": [
+						"order_id",
+						"user_id",
+						"restaurant_id",
+						"address",
+						"placed",
+						"approved",
+						"driver_assigned",
+						"food_picked",
+						"delivered",
+						"order_valid",
+						"payment_valid",
+						"created"
+					]
+				},
+				"name": "validate-order",
+				"table": {
+					"name": "orders",
+					"schema": "public"
+				},
+				"webhook": "http://localhost:8081/validate-order"
+			},
+			"type": "create_event_trigger"
+		},
+		{
+			"args": {
+				"headers": [],
+				"name": "restaurant-approval",
+				"table": {
+					"name": "orders",
+					"schema": "public"
+				},
+				"update": {
+					"columns": [
+						"payment_valid"
+					]
+				},
+				"webhook": "http://localhost:8081/restaurant-approval"
+			},
+			"type": "create_event_trigger"
+		},
+		{
+			"args": {
+				"headers": [],
+				"name": "agent-assignment",
+				"table": {
+					"name": "orders",
+					"schema": "public"
+				},
+				"update": {
+					"columns": [
+						"approved"
+					]
+				},
+				"webhook": "http://localhost:8081/agent-assignment"
+			},
+			"type": "create_event_trigger"
+		}
+	]
+}
