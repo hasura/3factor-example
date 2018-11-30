@@ -7,7 +7,7 @@ exports.handler = async (event, context, callback) => {
         var result = await validateOrder(data.new);
         return callback(null, {
             statusCode: 200,
-            body: result
+            body: JSON.stringify(result)
         });
     } catch(e) {
         console.log(e);

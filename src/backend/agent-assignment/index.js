@@ -2,10 +2,6 @@ const Sequelize = require("sequelize");
 
 const POSTGRES_CONNECTION_STRING = process.env.POSTGRES_CONNECTION_STRING || "postgres://postgres:password@localhost:6432/postgres";
 
-const sequelize = new Sequelize(
-    POSTGRES_CONNECTION_STRING, {}
-);
-
 const drivers = [95, 96, 97, 98, 99, 100];
 
 function getRandomDriver() {
@@ -14,7 +10,9 @@ function getRandomDriver() {
 
 async function assignAgent(order){
     try {
-
+        var sequelize = new Sequelize(
+            POSTGRES_CONNECTION_STRING, {}
+        );
         var driverId = getRandomDriver();
         var res = await sequelize.query('BEGIN;' +
                                     'INSERT INTO assignment (order_id, driver_id) values (:orderId, :driverId); ' +
@@ -26,6 +24,8 @@ async function assignAgent(order){
     } catch(e) {
         console.log(e);
         throw new Error(e);
+    } finally {
+	      sequelize.close();
     }
 }
 
