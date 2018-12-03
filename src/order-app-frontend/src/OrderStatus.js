@@ -6,9 +6,11 @@ import gql from "graphql-tag";
 import {Subscription} from "react-apollo";
 import getStatus from './GetStatus';
 
+const PAYMENT_URL = REACT_APP_PAYMENT_URL || 'http://localhost:8081/payment';
+
 const GET_ORDERS = gql`
   subscription fetch_orders($user: String!, $order_id: String! ) {
-    orders(where: {user_id: {_eq: $user}, order_id: {_eq: $order_id}}, order_by: created_asc) {
+    orders(where: {user_id: {_eq: $user}, order_id: {_eq: $order_id}}, order_by: { created: asc}) {
       order_id
       order_valid
       payment_valid
@@ -28,7 +30,7 @@ const OrderStatus = ({username, orderId}) => {
           subscription={GET_ORDERS} variables={{user: username, order_id: orderId}}>
           {({loading, error, data}) => {
             if (loading) return "Loading...";
-            if (error) return `Error!: ${error}`;
+            if (error) return `Error!: ${JSON.stringify(error, null, 2)}`;
             console.log(data);
             if (data.orders.length === 0) {
               return "No such order id."
@@ -93,7 +95,7 @@ class MakePayment extends React.Component {
   onClick () {
     this.setState({loading: true});
     const _this = this;
-    fetch('https://us-central1-danava-test.cloudfunctions.net/payment',
+    fetch(PAYMENT_URL,
       {
         method: 'POST',
         headers: {

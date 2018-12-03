@@ -11,7 +11,7 @@ async function makePayment(paymentReq) {
                                     'INSERT INTO payments(order_id, amount, type) values (:orderId, :amount, :type); ' +
                                     'UPDATE orders SET payment_valid=true WHERE order_id = :orderId; ' +
                                     'COMMIT;',
-                                        { replacements: { orderId: paymentReq.order_id, amount: paymentReq.amount, type: paymentReq.type } }
+                                        { replacements: { orderId: paymentReq.order_id, amount: paymentReq.metadata.amount, type: paymentReq.metadata.type } }
                                        );
         return res;
     } catch(e) {
