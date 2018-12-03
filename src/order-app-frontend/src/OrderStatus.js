@@ -6,7 +6,7 @@ import gql from "graphql-tag";
 import {Subscription} from "react-apollo";
 import getStatus from './GetStatus';
 
-const PAYMENT_URL = REACT_APP_PAYMENT_URL || 'http://localhost:8081/payment';
+const PAYMENT_URL = process.env.REACT_APP_PAYMENT_URL || 'http://localhost:8081/payment';
 
 const GET_ORDERS = gql`
   subscription fetch_orders($user: String!, $order_id: String! ) {
