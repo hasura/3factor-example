@@ -56,6 +56,7 @@
   background-size: cover;
   background-position: 0 0;
   background-repeat: no-repeat;
+  z-index: -1;
 }
 .bgImage::before
 {
@@ -189,17 +190,24 @@
 }
 .inputGroup .groupAppend
 {
-  width: 32% !important;
-  display: inline-block;
+  /* width: 32% !important;
+  display: inline-block; */
+
+}
+.groupAppend
+{
+  padding: 20px 0;
+  clear: both;
+  text-align: center;
 }
 .groupAppend button
 {
-  width: 100%;
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
+  /* border-bottom-left-radius: 0;
+  border-top-left-radius: 0; */
   border: 0;
   height: 40px;
   text-align: center;
+  margin: 0 10px;
   background-color: #f93c18;
   color: #fff;
   font-family: "raleway";
