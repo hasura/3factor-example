@@ -92,41 +92,46 @@ class MakePayment extends React.Component {
     this.onClick = this.onClick.bind(this);
   }
 
-  onClick () {
+  onClick = async () => {
     this.setState({loading: true});
-    const _this = this;
-    fetch(PAYMENT_URL,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          info: {
-            full_name: this.state.username,
-            credit_card_number: '1234 1234 1234 1234',
-            cvv: '111'
+    try {
+      const response = await fetch(
+        PAYMENT_URL,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
           },
-          metadata: {
-            amount: 500,
-            type: 'credit_card'
-          },
-          order_id: this.state.order.order_id
-        })
-      })
-    .then(res => res.json())
-    .catch(err => {
-      _this.setState({loading: false, error: err.toString()});
-    })
-    .then(response => {
-      _this.setState({paymentDone: true, loading: false, error: null});
-    });
+          body: JSON.stringify({
+            info: {
+              full_name: this.state.username,
+              credit_card_number: '1234 1234 1234 1234',
+              cvv: '111'
+            },
+            metadata: {
+              amount: 500,
+              type: 'credit_card'
+            },
+            order_id: this.state.order.order_id
+          })
+        }
+      );
+      const respObj = await response.json();
+
+      if (response.status !== 200) {
+        this.setState({loading: false, error: respObj.toString(), paymentDone: false});
+      } else {
+        this.setState({paymentDone: true, loading: false, error: null});
+      }
+    } catch (err) {
+      this.setState({loading: false, error: err.toString(), paymentDone: false});
+    }
   }
 
   render () {
     if (!this.props.order.order_valid) {
       return (
-        <Button bsStyle="primary" disabled>Waiting to make payment...</Button>
+        <Button bsStyle="primary" disabled>Waiting for order validation...</Button>
       )
     }
 
@@ -134,6 +139,18 @@ class MakePayment extends React.Component {
       return (
         null
       )
+    }
+
+    if (this.state.error) {
+      console.error(JSON.stringify(this.state.error, null, 2));
+    }
+
+    const buttonText = () => {
+      const { loading, paymentDone, error} = this.state;
+      if (loading) { return "Processing ..."; }
+      if (error) { return "Error! Try again"; }
+      if (paymentDone) { return "Done!"; }
+      return "Make payment";
     }
 
     return (
@@ -144,16 +161,13 @@ class MakePayment extends React.Component {
         <b>CVV: </b> 111 <br/>
         <b>Amount: </b> ₹500<br/>
         <br/>
-        {this.state.loading ?
-          (<Button bsStyle="primary" disabled>Processing payment...</Button>) :
-          (this.state.error ?
-            (<Button bsStyle="primary" onClick={this.onClick}>Try again: {this.state.error}</Button>) :
-            (this.state.paymentDone ?
-              (<Button bsStyle="primary" disabled>Done!</Button>) :
-              (<Button bsStyle="primary" onClick={this.onClick}>Make payment</Button>)
-            )
-          )
-        }
+        <Button
+          bsStyle="primary"
+          disabled={this.state.loading}
+          onClick={this.onClick}
+        >
+          {buttonText()}
+        </Button>
       </div>
     );
   }
