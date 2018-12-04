@@ -14,11 +14,9 @@ exports.handler = async (event, context, callback) => {
             headers
         });
     }
-
-    const { id, event: {op, data}, table } = JSON.parse(event.body);
-    console.log(`processing event ${id}`);
+    var paymentReq = JSON.parse(event.body);
     try {
-        var result = await makePayment(data.new);
+        var result = await makePayment(paymentReq);
         return callback(null, {
             statusCode: 200,
             body: JSON.stringify(result),
