@@ -1,6 +1,3 @@
 ### Deploy
 
-```bash
-# aws s3 sync splash/ s3://3factor-splash-screen
-```
-
+Automatically deployed on push to `master` branch via netlify.
