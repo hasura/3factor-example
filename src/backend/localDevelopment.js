@@ -26,7 +26,14 @@ app.post('/validate-order', async function (req, res) {
 });
 
 app.post('/payment', async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     try {
+        if (req.method == "OPTIONS") {
+	    res.json("");
+	    return;
+        }
         var paymentReq = req.body;
         var result = await makePayment(paymentReq);
         res.json(result);
