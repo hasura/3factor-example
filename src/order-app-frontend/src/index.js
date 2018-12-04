@@ -20,7 +20,7 @@ const httpurl = process.env.REACT_APP_HASURA_HTTP_URL || "http://localhost:8080/
 const wsLink = new WebSocketLink({
   uri: wsurl,
   options: {
-    reconnect: true
+    reconnect: true,
   }
 });
 const httpLink = new HttpLink({

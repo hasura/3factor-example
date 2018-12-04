@@ -8,7 +8,7 @@ import getStatus from './GetStatus';
 
 const GET_ORDERS = gql`
   subscription fetch_orders($user: String!) {
-    orders(where: {user_id: {_eq: $user}}, order_by: created_asc) {
+    orders(where: {user_id: {_eq: $user}}, order_by: { created: asc}) {
       order_id
       order_valid
       payment_valid
