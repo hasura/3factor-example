@@ -63,7 +63,7 @@ Next, let's design the order workflow and describe its functional components. Th
 
 **Order workflow:** Login -> Place order -> Validate order -> Payment -> Restaurant approval -> Agent assignment
 
-Let's describe these steps in detail and refer to their source code:
+Let's describe these steps in detail:
 
 1) **Login:** A user enters the app using a username. For this demo, there is no authentication.
 
@@ -135,7 +135,7 @@ We need to setup a development environment for our backend. We need to write bac
 
 4) **Agent assignment:** Source code: [agent-assignment](src/backend/agent-assignment)
 
-For this purpose, we will run a node server with each of the above functions exposed as HTTP APIs (webhooks) as defined in [src/backend/localDevelopment.js](src/backend/localDevelopment.js). Run the server and try these functions out:
+For this purpose, we will run a node server with each of the above functions exposed as HTTP APIs as defined in [src/backend/localDevelopment.js](src/backend/localDevelopment.js). Run the server and try these functions out:
 
 ```bash
 $ cd src/backend
@@ -159,7 +159,7 @@ The order workflow is initiated by the user creating an event (via an insert to 
 
 In the frontend, we will subscribe to the events on `order` table via realtime GraphQL and update the UI.
 
-In the backend, we will use Hasura Event Triggers to invoke HTTP APIs when events are emitted. The backend requires the following Event Triggers:
+In the backend, we will use Hasura Event Triggers to invoke webhooks when events are emitted. The backend requires the following Event Triggers:
 
 1) validate-order: On `insert` of an order.
 2) restaurant-approval: On `update` of an order after successful payment.
@@ -179,15 +179,16 @@ This finishes the entire development cycle on our local machine. You can start t
 
 ### Step 5: Use serverless functions
 
-Now, that you have locally developed and tested your app. Let's deploy all our functions to AWS Lambda and update the Event Triggers from localhost HTTP APIs to Lambda APIs.
+Now, that you have locally developed and tested your app. Let's deploy all these functions to AWS Lambda and update the Event Triggers from localhost HTTP APIs to Lambda APIs.
 
-Serverless functions are a crucial component of 3factor as it ensures many capabilities like infinite scale, no-ops and cost.
+Serverless functions are a crucial component of 3factor as it provides infinite scale, no-ops and optimal cost.
 
 To prepare our HTTP APIs for Lambda, we need to wrap the business logic in a Lambda "context". The Lambda context for `validate-order` is given in [validate-order/lambdaCtx.js](src/backend/validate-order/lambdaCtx.js). Let's package this as a zip file and deploy to Lambda:
 
 ```bash
 $ zip -r validate-order.zip validate-order/*
 ```
+Do the same for the other Event Triggers.
 
 There are many tutorials to deploy a NodeJS package on AWS Lambda with API Gateway for e.g. [this](https://github.com/hasura/graphql-serverless/tree/master/aws-nodejs/apollo-sequelize#deployment). We will keep Lambda deployment out of the scope of this tutorial.
 
