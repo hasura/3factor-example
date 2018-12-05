@@ -64,31 +64,41 @@ function FieldGroup({ id, label, help, ...props }) {
 const Home = ({username, onChange, onClick, logout}) => {
   if (username) {
     return (
-      <Grid>
-        <br/>
-        <Jumbotron>
-          <h1>Hi! {username} <span role="img" aria-label="emoji">🤓</span></h1>
-        </Jumbotron>
-        <Link to="/place-order"><Button bsStyle="primary">Place new order</Button></Link>
-        &nbsp; &nbsp;
-        <Button bsStyle="danger" onClick={logout}>Logout</Button>
-        <hr/>
-        <Orders username={username} />
-      </Grid>
+      <div>
+        <Grid>
+          <br/>
+          <Jumbotron>
+            <h1>Hi! {username} <span role="img" aria-label="emoji">🤓</span></h1>
+          </Jumbotron>
+          <Link to="/place-order"><Button bsStyle="primary">Place new order</Button></Link>
+          &nbsp; &nbsp;
+          <Button bsStyle="danger" onClick={logout}>Logout</Button>
+          <hr/>
+          <Orders username={username} />
+        </Grid>
+        <div className="footerWrapper">
+          <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
+        </div>
+      </div>
     );
   } else {
     return (
-      <Grid>
-        <br/>
-        <FieldGroup
-          id="formControlsText"
-          type="text"
-          label="Enter username"
-          placeholder="username"
-          onChange={onChange}
-        />
-        <Button bsStyle="primary" onClick={onClick}>Enter app</Button>
-      </Grid>
+      <div>
+        <Grid>
+          <br/>
+          <FieldGroup
+            id="formControlsText"
+            type="text"
+            label="Enter username"
+            placeholder="username"
+            onChange={onChange}
+          />
+          <Button bsStyle="primary" onClick={onClick}>Enter app</Button>
+        </Grid>
+        <div className="footerWrapper">
+          <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
+        </div>
+      </div>
     );
   }
 }

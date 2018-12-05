@@ -23,59 +23,64 @@ const GET_ORDERS = gql`
 
 const OrderStatus = ({username, orderId}) => {
   return (
-    <Grid>
-      <div>
-        <hr/>
-        <Subscription
-          subscription={GET_ORDERS} variables={{user: username, order_id: orderId}}>
-          {({loading, error, data}) => {
-            if (loading) return "Loading...";
-            if (error) return `Error!: ${JSON.stringify(error, null, 2)}`;
-            console.log(data);
-            if (data.orders.length === 0) {
-              return "No such order id."
-            } else {
-              const o = data.orders[0];
-              return (
-                <div>
-                  <Table striped hover bordered responsive>
-                    <tbody>
-                      <tr>
-                        <td>Created: </td>
-                        <td>
-                          {
-                            (new Date(o.created)).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Id:
-                        </td>
-                        <td>
-                          <Link to={'/'}>{o.order_id}</Link>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Status:
-                        </td>
-                        <td>
-                          {getStatus(o)}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                  <MakePayment order={o} username={username} />
-                </div>
-              );
-            }
-          }}
-        </Subscription>
-        <hr/>
-        <Link to="/"><Button bsStyle="danger">Back</Button></Link>
+    <div>
+      <Grid>
+        <div>
+          <hr/>
+          <Subscription
+            subscription={GET_ORDERS} variables={{user: username, order_id: orderId}}>
+            {({loading, error, data}) => {
+              if (loading) return "Loading...";
+              if (error) return `Error!: ${JSON.stringify(error, null, 2)}`;
+              console.log(data);
+              if (data.orders.length === 0) {
+                return "No such order id."
+              } else {
+                const o = data.orders[0];
+                return (
+                  <div>
+                    <Table striped hover bordered responsive>
+                      <tbody>
+                        <tr>
+                          <td>Created: </td>
+                          <td>
+                            {
+                              (new Date(o.created)).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                            }
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            Id:
+                          </td>
+                          <td>
+                            <Link to={'/'}>{o.order_id}</Link>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            Status:
+                          </td>
+                          <td>
+                            {getStatus(o)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                    <MakePayment order={o} username={username} />
+                  </div>
+                );
+              }
+            }}
+          </Subscription>
+          <hr/>
+          <Link to="/"><Button bsStyle="danger">Back</Button></Link>
+        </div>
+      </Grid>
+      <div className="footerWrapper">
+        <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
       </div>
-    </Grid>
+    </div>
   );
 };
 

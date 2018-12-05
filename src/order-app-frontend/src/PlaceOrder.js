@@ -203,10 +203,15 @@ class PlaceOrder extends React.Component {
     }
 
     return (
-      <Grid>
-        <br/>
-        {innerComponent}
-      </Grid>
+      <div>
+        <Grid>
+          <br/>
+          {innerComponent}
+        </Grid>
+        <div className="footerWrapper">
+          <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
+        </div>
+      </div>
     );
   }
 }
