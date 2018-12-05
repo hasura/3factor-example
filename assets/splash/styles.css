@@ -58,6 +58,23 @@
   background-repeat: no-repeat;
   z-index: -1;
 }
+.videoWrapper
+{
+  padding-top: 10px;
+  width: 80%;
+  margin: 0 auto;
+}
+.videoAspectRatio
+{
+  position: relative;
+  padding-bottom: 56.2%;
+}
+.videoAspectRatio iframe
+{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
 .bgImage::before
 {
   content: '';
@@ -207,8 +224,9 @@
   border: 0;
   height: 40px;
   text-align: center;
-  margin: 0 10px;
+  margin: 10px 10px;
   background-color: #f93c18;
+  width: 170px;
   color: #fff;
   font-family: "raleway";
   font-size: 14px;
@@ -318,6 +336,10 @@
   }
   .hasura-logo a {
     padding: 0 0px;
+    font-size: 12px;
+  }
+  .appStack i
+  {
     font-size: 12px;
   }
 }

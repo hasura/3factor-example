@@ -24,7 +24,29 @@
 .App-intro {
   font-size: large;
 }
-
+.footerWrapper
+{
+  background-color: #222;
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  color: #7d7d7d;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  font-size: 16px;
+}
+.footerWrapper a
+{
+  color: #337ab7;
+  text-decoration: none;
+}
+.footerWrapper a:hover
+{
+  text-decoration: none;
+  color: #23527c;
+}
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
