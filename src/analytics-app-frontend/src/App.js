@@ -146,6 +146,9 @@ class App extends Component {
             }}
           </Subscription>
         </div>
+        <div className="footerWrapper">
+          <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
+        </div>
       </ApolloProvider>
     );
   }
