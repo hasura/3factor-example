@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Button, Grid} from 'react-bootstrap';
+// import {Table, Button, Grid} from 'react-bootstrap';
 
 import {Link} from "react-router-dom";
 import gql from "graphql-tag";
@@ -24,7 +24,7 @@ const GET_ORDERS = gql`
 const OrderStatus = ({username, orderId}) => {
   return (
     <div>
-      <Grid>
+      <div className="container">
         <div>
           <hr/>
           <Subscription
@@ -39,7 +39,7 @@ const OrderStatus = ({username, orderId}) => {
                 const o = data.orders[0];
                 return (
                   <div>
-                    <Table striped hover bordered responsive>
+                    <table className="striped hover bordered responsive">
                       <tbody>
                         <tr>
                           <td>Created: </td>
@@ -66,7 +66,7 @@ const OrderStatus = ({username, orderId}) => {
                           </td>
                         </tr>
                       </tbody>
-                    </Table>
+                    </table>
                     <MakePayment order={o} username={username} />
                   </div>
                 );
@@ -74,9 +74,9 @@ const OrderStatus = ({username, orderId}) => {
             }}
           </Subscription>
           <hr/>
-          <Link to="/"><Button bsStyle="danger">Back</Button></Link>
+          <Link to="/"><button className="btn btn-danger">Back</button></Link>
         </div>
-      </Grid>
+      </div>
       <div className="footerWrapper">
         <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
       </div>
@@ -136,7 +136,7 @@ class MakePayment extends React.Component {
   render () {
     if (!this.props.order.order_valid) {
       return (
-        <Button bsStyle="primary" disabled>Waiting for order validation...</Button>
+        <button className="btn btn-primary" disabled>Waiting for order validation...</button>
       )
     }
 
@@ -166,13 +166,13 @@ class MakePayment extends React.Component {
         <b>CVV: </b> 111 <br/>
         <b>Amount: </b> ₹500<br/>
         <br/>
-        <Button
-          bsStyle="primary"
+        <button
+          className="btn btn-primary"
           disabled={this.state.loading}
           onClick={this.onClick}
         >
           {buttonText()}
-        </Button>
+        </button>
       </div>
     );
   }
