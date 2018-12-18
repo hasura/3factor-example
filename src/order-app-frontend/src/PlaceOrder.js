@@ -92,7 +92,9 @@ class PlaceOrder extends React.Component {
                 if (loading) return "Loading items...";
                 if (error) return `Error!: ${error}`;
                 return data.menu_items.map((item, i) => (
-                  <input type="checkbox" key={i} onChange={this.handleChanged(item.name)}>{item.name}</input>
+                  <div>
+                    <input type="checkbox" key={i} onChange={this.handleChanged(item.name)} /> {item.name}
+                  </div>
                 ));
               }}
             </Query>

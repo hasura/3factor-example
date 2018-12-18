@@ -65,7 +65,7 @@ const Home = ({username, onChange, onClick, logout}) => {
       <div>
         <div className="container">
           <br/>
-          <div class="jumbotron">
+          <div className="jumbotron">
             <h1>Hi! {username} <span role="img" aria-label="emoji">🤓</span></h1>
           </div>
           <Link to="/place-order"><button className="btn btn-primary">Place new order</button></Link>
