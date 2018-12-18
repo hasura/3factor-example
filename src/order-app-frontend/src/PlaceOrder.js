@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Checkbox, Button} from 'react-bootstrap';
+// import {Grid, Checkbox, Button} from 'react-bootstrap';
 import {Link} from "react-router-dom";
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
@@ -82,7 +82,7 @@ class PlaceOrder extends React.Component {
     // If not ordered yet
     if (!this.state.ordered) {
       innerComponent = (
-        <Grid>
+        <div className="container">
           <br/>
           <div>
             <h4>Choose items:</h4>
@@ -92,7 +92,9 @@ class PlaceOrder extends React.Component {
                 if (loading) return "Loading items...";
                 if (error) return `Error!: ${error}`;
                 return data.menu_items.map((item, i) => (
-                  <Checkbox key={i} onChange={this.handleChanged(item.name)}>{item.name}</Checkbox>
+                  <div>
+                    <input type="checkbox" key={i} onChange={this.handleChanged(item.name)} /> {item.name}
+                  </div>
                 ));
               }}
             </Query>
@@ -103,10 +105,10 @@ class PlaceOrder extends React.Component {
                   this.props.routeProps.history.push('/order/'+this.state.uuid);
                 }
                 if (loading) {
-                  return (<span><Button bsStyle="primary" disabled>Loading...</Button>&nbsp;&nbsp;</span>);
+                  return (<span><button className="btn btn-primary" disabled>Loading...</button>&nbsp;&nbsp;</span>);
                 }
                 if (error) {
-                  return (<span><Button bsStyle="primary" >Try again: {error.toString()}</Button>&nbsp;&nbsp;</span>);
+                  return (<span><button className="btn btn-primary" >Try again: {error.toString()}</button>&nbsp;&nbsp;</span>);
                 }
                 const items = Object.keys(this.state.items).filter((item) => (
                   this.state.items[item]
@@ -118,8 +120,8 @@ class PlaceOrder extends React.Component {
 
                 return (
                   <span>
-                    <Button
-                      bsStyle="primary"
+                    <button
+                      className="btn btn-primary"
                       onClick={(e) => {
                         if (items.length === 0) {
                           window.alert('No items selected.');
@@ -133,7 +135,7 @@ class PlaceOrder extends React.Component {
                           }})
                       }}>
                       Order
-                    </Button>&nbsp;&nbsp;
+                    </button>&nbsp;&nbsp;
                   </span>
                 );
               }}
@@ -144,10 +146,10 @@ class PlaceOrder extends React.Component {
                   this.props.routeProps.history.push('/');
                 }
                 if (loading) {
-                  return (<span><Button bsStyle="primary" disabled>Loading...</Button>&nbsp;&nbsp;</span>);
+                  return (<span><button className="btn btn-primary" disabled>Loading...</button>&nbsp;&nbsp;</span>);
                 }
                 if (error) {
-                  return (<span><Button bsStyle="primary" >Try again: {error.toString()}</Button>&nbsp;&nbsp;</span>);
+                  return (<span><button className="btn btn-primary" >Try again: {error.toString()}</button>&nbsp;&nbsp;</span>);
                 }
                 const items = Object.keys(this.state.items).filter((item) => (
                   this.state.items[item]
@@ -172,8 +174,8 @@ class PlaceOrder extends React.Component {
                 all_items = [].concat.apply([], all_items);
                 return (
                   <span>
-                    <Button
-                      bsStyle="primary"
+                    <button
+                      className="btn btn-primary"
                       onClick={(e) => {
                         if (items.length === 0) {
                           window.alert('No items selected.');
@@ -186,14 +188,14 @@ class PlaceOrder extends React.Component {
                           }})
                       }}>
                       Order 1000 times
-                    </Button>&nbsp;&nbsp;
+                    </button>&nbsp;&nbsp;
                   </span>
                 );
               }}
             </Mutation>
-            <Link to="/"><Button bsStyle="danger">Cancel</Button></Link>
+            <Link to="/"><button className="btn btn-danger">Cancel</button></Link>
           </div>
-        </Grid>
+        </div>
       );
     }
 
@@ -204,10 +206,10 @@ class PlaceOrder extends React.Component {
 
     return (
       <div>
-        <Grid>
+        <div className="container">
           <br/>
           {innerComponent}
-        </Grid>
+        </div>
         <div className="footerWrapper">
           <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Button} from 'react-bootstrap';
+// import {Table, Button} from 'react-bootstrap';
 
 import {Link} from "react-router-dom";
 import gql from "graphql-tag";
@@ -40,15 +40,15 @@ const Orders = ({username}) => (
     <Mutation mutation={PAY_ALL}>
       {(payAll, {loading, error, data}) => {
         if (loading) {
-          return (<span><Button bsStyle="warning" disabled>Loading...</Button>&nbsp;&nbsp;</span>);
+          return (<span><button className="btn btn-warning" disabled>Loading...</button>&nbsp;&nbsp;</span>);
         }
         if (error) {
-          return (<span><Button bsStyle="warning" >Try again: {error.toString()}</Button>&nbsp;&nbsp;</span>);
+          return (<span><button className="btn btn-warning" >Try again: {error.toString()}</button>&nbsp;&nbsp;</span>);
         }
         return (
           <span>
-            <Button
-              bsStyle="warning"
+            <button
+              className="btn btn-warning"
               onClick={(e) => {
                 payAll({
                   variables: {
@@ -56,7 +56,7 @@ const Orders = ({username}) => (
                   }})
               }}>
               {data ? (data.update_orders.affected_rows + ' paid!') : 'Pay all'}
-            </Button>&nbsp;&nbsp;
+            </button>&nbsp;&nbsp;
           </span>
         );
       }}
@@ -85,14 +85,14 @@ const Orders = ({username}) => (
               </td>
             </tr>));
           return (
-            <Table striped hover bordered responsive>
+            <table className="striped hover bordered responsive">
               <thead>
                 <tr><th>Created</th><th>Order ID</th><th>Status</th></tr>
               </thead>
               <tbody>
                 {orders}
               </tbody>
-            </Table>
+            </table>
           );
         }
       }}
