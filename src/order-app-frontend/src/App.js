@@ -4,7 +4,9 @@ import { BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
 import Orders from './Orders';
 import PlaceOrder from './PlaceOrder';
 import OrderStatus from './OrderStatus';
-// import {Button, Grid, Jumbotron, FormControl, FormGroup, ControlLabel, HelpBlock} from 'react-bootstrap';
+import {Button, Grid, Jumbotron,
+  FormControl, FormGroup, ControlLabel,
+  HelpBlock} from 'react-bootstrap';
 
 class App extends React.Component {
   constructor (props) {
@@ -48,32 +50,32 @@ class App extends React.Component {
     );
   }
 }
-/*
+
 function FieldGroup({ id, label, help, ...props }) {
   return (
     <FormGroup controlId={id}>
-      <label>{label}</label>
+      <ControlLabel>{label}</ControlLabel>
       <FormControl {...props} />
       {help && <HelpBlock>{help}</HelpBlock>}
     </FormGroup>
   );
 }
-*/
+
 const Home = ({username, onChange, onClick, logout}) => {
   if (username) {
     return (
       <div>
-        <div className="container">
+        <Grid>
           <br/>
-          <div className="jumbotron">
+          <Jumbotron>
             <h1>Hi! {username} <span role="img" aria-label="emoji">🤓</span></h1>
-          </div>
-          <Link to="/place-order"><button className="btn btn-primary">Place new order</button></Link>
+          </Jumbotron>
+          <Link to="/place-order"><Button bsStyle="primary">Place new order</Button></Link>
           &nbsp; &nbsp;
-          <button className="btn btn-danger" onClick={logout}>Logout</button>
+          <Button bsStyle="danger" onClick={logout}>Logout</Button>
           <hr/>
           <Orders username={username} />
-        </div>
+        </Grid>
         <div className="footerWrapper">
           <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
         </div>
@@ -82,13 +84,8 @@ const Home = ({username, onChange, onClick, logout}) => {
   } else {
     return (
       <div>
-        <div className="container">
+        <Grid>
           <br/>
-          <div className="form-group">
-            <label for="formControlsText" className="control-label">Enter username</label>
-            <input type="text" id="formControlsText" className="form-control" placeholder="username" onChange={onChange}/>
-          </div>
-          {/*
           <FieldGroup
             id="formControlsText"
             type="text"
@@ -96,9 +93,8 @@ const Home = ({username, onChange, onClick, logout}) => {
             placeholder="username"
             onChange={onChange}
           />
-          */}
-          <button className="btn btn-primary" onClick={onClick}>Enter app</button>
-        </div>
+          <Button bsStyle="primary" onClick={onClick}>Enter app</Button>
+        </Grid>
         <div className="footerWrapper">
           <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
         </div>
