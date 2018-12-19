@@ -1,11 +1,11 @@
 import React from 'react';
-// import {Glyphicon, Badge} from 'react-bootstrap';
+import {Glyphicon, Badge} from 'react-bootstrap';
 
 const icons = {
-  running: (<span className="glyphicon glyphicon-flash" aria-hidden="true"></span>),
-  waiting: (<span className="glyphicon glyphicon-flash" aria-hidden="true"></span>),
-  done:    (<span className="glyphicon glyphicon-ok" aria-hidden="true"></span>),
-  notyet:  (<span className="glyphicon glyphicon-remove" aria-hidden="true"></span>)
+  running: (<Glyphicon glyph="flash" />),
+  waiting: (<Glyphicon glyph="flash" />),
+  done:    (<Glyphicon glyph="ok" />),
+  notyet:  (<Glyphicon glyph="remove" />)
 };
 
 const statuses = [
@@ -70,6 +70,6 @@ export default ({order_valid, payment_valid, approved, driver_assigned}) => {
     statusBar[3].value ='done';
     return createBar(statusBar);
   } else {
-    return (<span className="badge badge-secondary">!?! 'Unknown state'</span>);
+    return (<span><Badge>!?!</Badge> 'Unknown state'</span>);
   }
 };
