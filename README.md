@@ -20,7 +20,7 @@ From [3factor.app](https://3factor.app/) :
 >
 > 1) Realtime GraphQL
 >
-> 2) Event-driven
+> 2) Reliable eventing
 >
 > 3) Async serverless
 
