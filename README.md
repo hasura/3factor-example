@@ -194,7 +194,7 @@ There are many tutorials to deploy a NodeJS package on AWS Lambda with API Gatew
 
 Assuming you have deployed your Lambda succesfully, you would have received an HTTP endpoint for it. Update your Event Triggers with the new endpoints through the Hasura console or Hasura API and that's it.
 
-#### Connection Pooling
+#### (Optional) Connection Pooling 
 
 The Lambda functions need database connections to execute their logic which cannot scale at the same rate as serverless invocations (as database connections are slow and costly). Hence, we need an external connection pooler to "loadbalance" the database connections.
 
