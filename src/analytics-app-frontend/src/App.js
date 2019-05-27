@@ -109,20 +109,37 @@ class App extends Component {
                 number_orders {
                   count
                 }
+              }
+            `}  
+            subscription={gql`
+              subscription {
                 number_order_validated {
                   count
                 }
+              }
+            `}    
+            subscription={gql`
+              subscription {
                 number_order_payment_valid {
                   count
                 }
+              }
+            `}  
+            subscription={gql`
+              subscription {
                 number_order_approved {
                   count
                 }
+              }
+            `}      
+            subscription={gql`
+              subscription {
                 number_order_driver_assigned {
                   count
                 }
               }
-            `}>
+            `}
+          >
 
             {({ loading, error, data }) => {
               if (loading) return <p>Loading...</p>;
