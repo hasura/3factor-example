@@ -14,11 +14,17 @@ import { getMainDefinition } from 'apollo-utilities';
 
 const wsurl = process.env.REACT_APP_HASURA_WEBSOCKET_URL || "ws://localhost:8080/v1alpha1/graphql";
 const httpurl = process.env.REACT_APP_HASURA_HTTP_URL || "http://localhost:8080/v1alpha1/graphql";
+const adminSecret = process.env.REACT_APP_HASURA_ADMIN_SECRET;
 
 const wsLink = new WebSocketLink({
   uri: wsurl,
   options: {
-    reconnect: true
+    reconnect: true,
+    connectionParams: {
+      headers: {
+        "x-hasura-admin-secret": adminSecret
+      }
+    }
   }
 });
 const httpLink = new HttpLink({
@@ -98,53 +104,120 @@ var chartData = {
     ]
 };
 
+const subscriptions = [
+  {
+    name: "number_orders",
+    subscription: gql`
+      subscription {
+        number_orders {
+          count
+        }
+      }
+    `
+  },
+  {
+    name: "number_order_validated",
+    subscription: gql`
+      subscription {
+        number_order_validated {
+          count
+        }
+      }
+    `
+  },
+  {
+    name: "number_order_payment_valid",
+    subscription: gql`
+      subscription {
+        number_order_payment_valid {
+          count
+        }
+      }
+    `
+  },
+  {
+    name: "number_order_approved",
+    subscription: gql`
+      subscription {
+        number_order_approved {
+          count
+        }
+      }
+    `
+  },
+];
+
 class App extends Component {
+  state = {
+    number_orders: 0,
+    number_order_validated: 0,
+    number_order_payment_valid: 0,
+    number_order_approved: 0,
+    number_order_driver_assigned: 0,
+    loading: true,
+    error: false
+  }
+
+  componentDidMount() {
+    subscriptions.forEach(s => {
+      client.subscribe({
+        query: s.subscription
+      }).subscribe({
+        next: (event) => {
+          this.setState({
+            [s.name]: event.data[s.name][0].count,
+            loading: false
+          });
+        },
+        error: (error) => {
+          console.error(error);
+          this.setState({
+            error: true,
+            loading: false
+          })
+        }
+      })
+    });
+  }
   render() {
+    const {
+      loading,
+      error,
+      number_orders,
+      number_order_approved,
+      number_order_driver_assigned,
+      number_order_validated,
+      number_order_payment_valid
+    } = this.state;
+
+    if (error) {
+      return <div className="App">Error</div>;
+    }
+
+    chartData.datasets[0].data.push(number_orders);
+    chartData.datasets[1].data.push(number_order_validated);
+    chartData.datasets[2].data.push(number_order_payment_valid);
+    chartData.datasets[3].data.push(number_order_approved);
+    chartData.datasets[4].data.push(number_order_driver_assigned);
+    chartData.labels.push(1);
     return (
       <ApolloProvider client={client}>
         <div className="App">
-          <Subscription
-            subscription={gql`
-              subscription {
-                number_orders {
-                  count
-                }
-                number_order_validated {
-                  count
-                }
-                number_order_payment_valid {
-                  count
-                }
-                number_order_approved {
-                  count
-                }
-                number_order_driver_assigned {
-                  count
-                }
-              }
-            `}>
-
-            {({ loading, error, data }) => {
-              if (loading) return <p>Loading...</p>;
-              if (error) return <p>Error :(</p>;
-
-              chartData.datasets[0].data.push(data.number_orders[0].count);
-              chartData.datasets[1].data.push(data.number_order_validated[0].count);
-              chartData.datasets[2].data.push(data.number_order_payment_valid[0].count);
-              chartData.datasets[3].data.push(data.number_order_approved[0].count);
-              chartData.datasets[4].data.push(data.number_order_driver_assigned[0].count);
-              chartData.labels.push(1);
-              return (
-                <LineChart data={chartData}
-                  options={{responsive: true, maintainAspectRatio: false,
-                    scales: {
-                      xAxes: [{ labels: { userCallback: () => ('') } }]
-                    }
-                  }}
-                  />
-              );
-            }}
-          </Subscription>
+          {
+            loading
+            ?
+            <p>Loading...</p>
+            :
+            (
+              <LineChart data={chartData}
+                options={{responsive: true, maintainAspectRatio: false,
+                  scales: {
+                    xAxes: [{ labels: { userCallback: () => ('') } }]
+                  }
+                }}
+              />
+            )
+          }
         </div>
         <div className="footerWrapper">
           <a href={'https://github.com/hasura/3factor-example'} target={'_blank'}>Source</a>
