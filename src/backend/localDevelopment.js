@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
+
+app.use(cors());
 
 const validateOrder = require('validate-order').validateOrder;
 const makePayment = require('payment').makePayment;

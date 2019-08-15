@@ -25,7 +25,7 @@
 					"name": "orders",
 					"schema": "public"
 				},
-				"webhook": "http://localhost:8081/validate-order"
+				"webhook": "http://host.docker.internal:8081/validate-order"
 			},
 			"type": "create_event_trigger"
 		},
@@ -42,7 +42,7 @@
 						"payment_valid"
 					]
 				},
-				"webhook": "http://localhost:8081/restaurant-approval"
+				"webhook": "http://host.docker.internal:8081/restaurant-approval"
 			},
 			"type": "create_event_trigger"
 		},
@@ -59,7 +59,7 @@
 						"approved"
 					]
 				},
-				"webhook": "http://localhost:8081/agent-assignment"
+				"webhook": "http://host.docker.internal:8081/agent-assignment"
 			},
 			"type": "create_event_trigger"
 		}
