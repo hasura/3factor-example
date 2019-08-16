@@ -32,30 +32,46 @@ Here is the high-level diagram comparing a traditional architecture vs a 3factor
 
 ### Stack
 
-NodeJS 8.1
+NodeJS 8.1+
 
 Postgres 9.5+
 
 Hasura GraphQL Engine
 
-AWS Lambda
+AWS Lambda (optional, for hosting serverless functions)
 
-### Step 1: Model application
+### Step 1: Setup a realtime GraphQL interface
 
-The core modeling of a 3factor app is very similar to traditional application modeling: we start by defining the schema and then define different functional components. The main difference is that 3factor emphasizes that each function be atomic (i.e. either happens completely or doesn't happen at all) and invoked via (persisted) events.
+#### Hasura
+
+3factor requires the frontend use GraphQL for querying and performing actions. The reason for this is two-fold: fast iteration and realtime feedback. 
+
+We will use Hasura to get GraphQL APIs over our existing Postgres database. We will use Docker to run Hasura. If you do not have Docker, you can install it from [here](https://store.docker.com/search?type=edition&offering=community).
+
+Run the following command:
+```bash
+$ docker-compose up -d
+```
 
 #### Schema
 
-The schema of our application is defined in [schema.sql](schema.sql) which you can apply on your postgres database.
+The schema of our application is defined in [schema.sql](schema.sql) which you can apply on your Postgres database.
 
 ```bash
-
-$ export POSTGRES_CONNECTION_STRING='postgres://postgres:password@localhost:5432/postgres'
-
-$ psql $POSTGRES_CONNECTION_STRING < schema.sql
-
+$ docker exec -i 3factor_postgres psql -U postgres postgres < schema.sql
 ```
-In the above snippet, we are running a postgres database on localhost.
+
+Open the Hasura console by visiting http://localhost:8080/console. In the `Data` tab, you will see all the tables in our Postgres database. Just track them all to get GraphQL APIs over them instantly:
+
+![track-all](assets/track-all.png)
+
+Hasura will also detect relationships (via foreign-keys) automatically and you can track them as well to get GraphQL APIs over relationships:
+
+![track-all-relations](assets/track-all-relations.png)
+
+### Step 2: Model application
+
+The core modeling of a 3factor app is very similar to traditional application modeling: we start by defining the schema and then define different functional components. The main difference is that 3factor emphasizes that each function be atomic (i.e. either happens completely or doesn't happen at all) and invoked via (persisted) events.
 
 #### Functions
 
@@ -78,37 +94,6 @@ Let's describe these steps in detail:
 6) **Agent assignment:** After restaurant approves, an agent is assigned for delivery of the order.
 
 Next, let's get into development.
-
-### Step 2: Setup a realtime GraphQL interface
-
-3factor requires the frontend use GraphQL for querying and performing actions. The reason for this is two-fold: fast iteration and realtime feedback. 
-
-We will use Hasura to get GraphQL APIs over our existing postgres database. We will use Docker to run Hasura. If you do not have Docker, you can install it from [here](https://store.docker.com/search?type=edition&offering=community).
-
-If you have a remote postgres database, run the following command:
-```bash
-$ docker run -d -p 8080:8080 \
-  -e HASURA_GRAPHQL_DATABASE_URL=$POSTGRES_CONNECTION_STRING \
-  -e HASURA_GRAPHQL_ENABLE_CONSOLE=true \
-  hasura/graphql-engine:latest
-```
-
-If your postgres database is running on localhost, run the following command instead:
-
-```bash
-$ docker run -d --net=host \
-  -e HASURA_GRAPHQL_DATABASE_URL=$POSTGRES_CONNECTION_STRING \
-  -e HASURA_GRAPHQL_ENABLE_CONSOLE=true \
-  hasura/graphql-engine:latest
-```
-
-Open the Hasura console by visiting http://localhost:8080/console. In the `Data` tab, you will see all the tables in our postgres database. Just track them all to get GraphQL APIs over them instantly:
-
-![track-all](assets/track-all.png)
-
-Hasura will also detect relationships (via foreign-keys) automatically and you can track them as well to get GraphQL APIs over relationships:
-
-![track-all-relations](assets/track-all-relations.png)
 
 ### Step 3: Local development 
 
@@ -135,17 +120,18 @@ We need to setup a development environment for our backend. We need to write bac
 
 4) **Agent assignment:** Source code: [agent-assignment](src/backend/agent-assignment)
 
-For this purpose, we will run a node server with each of the above functions exposed as HTTP APIs as defined in [src/backend/localDevelopment.js](src/backend/localDevelopment.js). Run the server and try these functions out:
+For this purpose, we will run a Node server with each of the above functions exposed as HTTP APIs as defined in [src/backend/localDevelopment.js](src/backend/localDevelopment.js). Run the server and try these functions out:
 
 ```bash
 $ cd src/backend
 $ npm install
+$ export POSTGRES_CONNECTION_STRING='postgres://postgres:@localhost:5432/postgres'
 $ node localDevelopment.js
 
 Output: server running on port 8081
 ```
 
-In a different terminal: 
+You can use cURL to manually test the endpoints from the Node server. For example, in a different terminal: 
 
 ```bash
 $ curl -d '{"order_id": "abc-ad21-adf"}' -H 'Content-Type: application/json' localhost:8081/validate-order
@@ -175,11 +161,15 @@ Go back to the Hasura console at http://localhost:8080/console and in the `Event
 
 ![event-triggers](assets/event-triggers.png)
 
-This finishes the entire development cycle on our local machine. You can start testing the app now.
+Note that if you're running this example project on macOS or Windows, the event triggers provided in `event-triggers.json` will need to be modified in order to work. The webhooks in the event triggers are pointing to `localhost`, e.g. `http://localhost:8081/validate-order`, and Hasura which is running from the Docker container is not able to connect to the Express server (`node localDevelopment.js`) running directly on `localhost` (not in Docker).
 
-### Step 5: Use serverless functions
+The solution is to modify the event triggers so that Hasura within the Docker container can connect to the Express server on `localhost`, which is discussed in the [Hasura Docker Network Config](https://docs.hasura.io/1.0/graphql/manual/deployment/docker/index.html#network-config) docs. On macOS, the event trigger would be updated by replacing `localhost` with `host.docker.internal`, and on Windows replacing it with `docker.for.win.localhost`, e.g. the new event trigger would point to `http://host.docker.internal:8081/validate-order`. You'll need to make this change for all event triggers.
 
-Now, that you have locally developed and tested your app. Let's deploy all these functions to AWS Lambda and update the Event Triggers from localhost HTTP APIs to Lambda APIs.
+This finishes the entire development cycle on our local machine. You can start testing the app in a hosted environment now.
+
+### (Optional) Step 5: Use AWS Lambda to host serverless functions
+
+Now that you have locally developed and tested your app, let's deploy all these functions to AWS Lambda and update the Event Triggers from localhost HTTP APIs to Lambda APIs.
 
 Serverless functions are a crucial component of 3factor as it provides infinite scale, no-ops and optimal cost.
 
@@ -192,7 +182,7 @@ Do the same for the other Event Triggers.
 
 There are many tutorials to deploy a NodeJS package on AWS Lambda with API Gateway for e.g. [this](https://github.com/hasura/graphql-serverless/tree/master/aws-nodejs/apollo-sequelize#deployment). We will keep Lambda deployment out of the scope of this tutorial.
 
-Assuming you have deployed your Lambda succesfully, you would have received an HTTP endpoint for it. Update your Event Triggers with the new endpoints through the Hasura console or Hasura API and that's it.
+Assuming you have deployed your Lambda successfully, you would have received an HTTP endpoint for it. Update your Event Triggers with the new endpoints through the Hasura console or Hasura API and that's it.
 
 #### (Optional) Connection Pooling 
 
