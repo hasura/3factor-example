@@ -4,9 +4,9 @@ This is a canonical app for 3factor which showcases the three factors in detail 
 
 You can preview the apps at the following links:
 
-**order-app** : [3factor.hasura.app/order-app](https://3factor.hasura.app/order-app)
+**order-app** : [https://serverless-demo.hasura.app/order-app](https://serverless-demo.hasura.app/order-app)
 
-**analytics-app** : [3factor.hasura.app/analytics-app](https://3factor.hasura.app/analytics-app)
+**analytics-app** : [https://serverless-demo.hasura.app/analytics-app](https://serverless-demo.hasura.app/analytics-app)
 
 You can follow along this step-by-step guide to deploy and evaluate this application design pattern yourself.
 
