@@ -2,12 +2,6 @@
 
 This is a canonical app for 3factor which showcases the three factors in detail with a reference implementation. The reference implementation is a food ordering app which has a user facing component (order-app) and an admin dashboard (analytics-app).
 
-You can preview the apps at the following links:
-
-**order-app** : [https://serverless-demo.hasura.app/order-app](https://serverless-demo.hasura.app/order-app)
-
-**analytics-app** : [https://serverless-demo.hasura.app/analytics-app](https://serverless-demo.hasura.app/analytics-app)
-
 You can follow along this step-by-step guide to deploy and evaluate this application design pattern yourself.
 
 ## What is a 3Factor App?
