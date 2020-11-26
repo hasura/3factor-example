@@ -9,11 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "agent-assignment": "file:./agent-assignment",
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
-    "validate-order": "file:./validate-order",
     "payment": "file:./payment",
     "restaurant-approval": "file:./restaurant-approval",
-    "agent-assignment": "file:./agent-assignment"
+    "sequelize": "^5.15.0",
+    "validate-order": "file:./validate-order"
   }
 }
