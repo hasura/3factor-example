@@ -14,7 +14,7 @@
     "apollo-link-error": "^1.1.0",
     "apollo-link-http": "^1.5.4",
     "apollo-link-ws": "^1.0.8",
-    "chart.js": "^1.1.1",
+    "chart.js": "^2.9.4",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "react": "^16.4.1",
